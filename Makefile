@@ -12,7 +12,8 @@ DIR_LIB = ./libft/
 
 SRC_DIR = ./srcs/
 
-FILES = main.c
+FILES = main.c \
+			md5.c
 
 SRCS = $(addprefix $(SRC_DIR), $(FILES))
 
@@ -26,12 +27,13 @@ RM = /bin/rm -rf
 all: mkdirobj $(DEP_OBJ)
 		@ make -C $(DIR_LIB)
 		@ /bin/echo -n "Archiving object in $(NAME):"
-		@ $(CC) -o $(NAME) $(OBJS) $(MFLAGS) -L $(DIR_LIB)
+		@ $(CC) -o $(NAME) $(OBJS) -L $(DIR_LIB) -I $(INCLUDE_DIR) -g
 		@ echo " \033[32mAll done!\033[0m"
 
 $(DIR_OBJ)%.o: $(SRC_DIR)%.c
 	@ /bin/echo -n "    $(notdir $@)"
-	@ $(CC) $(CFLAGS) -c -o $@ $< -I $(INCLUDE_DIR)
+	# @ $(CC) $(CFLAGS) -c -o $@ $< -I $(INCLUDE_DIR)
+	@ $(CC) -c -o $@ $< -I $(INCLUDE_DIR) -g
 	@ echo " \033[32mOK\033[0m"
 
 mkdirobj:
@@ -49,6 +51,10 @@ fclean: clean
 	@ $(RM) $(NAME)
 	@ $(RM) $(NAME).dSYM
 	@ echo " \033[32mdone\033[0m"
+
+debug:
+	@ make -C $(DIR_LIB)
+	$(CC) -o $(NAME) $(SRCS) -L$(DIR_LIB) -I$(INCLUDE_DIR)  -g
 
 re: fclean all
 

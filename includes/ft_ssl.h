@@ -1,20 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_ssl.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vdarmaya <vdarmaya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/07/12 20:53:02 by vdarmaya          #+#    #+#             */
-/*   Updated: 2018/07/12 20:58:59 by vdarmaya         ###   ########.fr       */
+/*   Created: 2018/07/12 20:54:06 by vdarmaya          #+#    #+#             */
+/*   Updated: 2018/07/12 23:59:22 by vdarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_ssl.h"
+#ifndef FT_SSL_H
+# define FT_SSL_H
 
-int	main(int argc, char **argv)
-{
-	(void)argc;
-	ft_putstr(md5(argv[1]));
-	return (0);
-}
+#include "../libft/libft.h"
+#include <math.h>
+#include <stdlib.h>
+
+#define H0 0x67452301
+#define H1 0xEFCDAB89
+#define H2 0x98BADCFE
+#define H3 0x10325476
+
+# define ABS(x) (x < 0 ? x * -1 : x)
+
+char	*md5(void *content);
+
+#endif

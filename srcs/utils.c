@@ -1,20 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vdarmaya <vdarmaya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/07/12 20:53:02 by vdarmaya          #+#    #+#             */
-/*   Updated: 2018/07/12 20:58:59 by vdarmaya         ###   ########.fr       */
+/*   Created: 2018/07/12 22:49:18 by vdarmaya          #+#    #+#             */
+/*   Updated: 2018/07/12 23:03:38 by vdarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_ssl.h"
+// #include "ft_ssl.h"
 
-int	main(int argc, char **argv)
-{
-	(void)argc;
-	ft_putstr(md5(argv[1]));
-	return (0);
-}
+// double ft_sin(double x)
+// {
+
+// }
+
+// double ft_floor(double x)
+// {
+// 	double	out;
+
+// 	out = (double)((long)x);
+// 	if (out < 0)
+// 		return (out - 1);
+// 	return (out);
+// }
