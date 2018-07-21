@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gnl.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bdurst <bdurst@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vdarmaya <vdarmaya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/04/28 20:16:44 by bdurst            #+#    #+#             */
-/*   Updated: 2015/06/06 12:41:32 by bdurst           ###   ########.fr       */
+/*   Updated: 2018/07/15 22:08:56 by vdarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,6 @@
 
 # define BUFF_SIZE 32000
 
-int				gnl(int const fd, char **line);
+int				fake_gnl(int const fd, char **line, int out);
 
 #endif

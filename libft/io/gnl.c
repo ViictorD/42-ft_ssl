@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gnl.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bdurst <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vdarmaya <vdarmaya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/27 12:32:55 by bdurst            #+#    #+#             */
-/*   Updated: 2016/05/27 12:32:55 by bdurst           ###   ########.fr       */
+/*   Updated: 2018/07/15 22:07:36 by vdarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static char		*gnl_get_line(char *str, char **line, int *clean)
 	return (&str[i]);
 }
 
-int				gnl(int const fd, char **line)
+int				fake_gnl(int const fd, char **line, int out)
 {
 	static char		*stock = NULL;
 	char			buff[BUFF_SIZE + 1];
@@ -56,11 +56,10 @@ int				gnl(int const fd, char **line)
 		if (tmp && clean)
 			free(tmp);
 	}
-	if (ret == -1)
-		return (-1);
+	out = ft_strchr(stock, '\n') ? 2 : 1;
 	if (stock)
 		stock = gnl_get_line(stock, line, &clean);
 	if (!ret && (!stock || !*stock) && (!line || !*line || !**line))
 		return (0);
-	return (1);
+	return (out);
 }
