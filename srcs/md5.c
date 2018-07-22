@@ -6,7 +6,7 @@
 /*   By: vdarmaya <vdarmaya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/16 20:02:35 by vdarmaya          #+#    #+#             */
-/*   Updated: 2018/07/16 20:48:03 by vdarmaya         ###   ########.fr       */
+/*   Updated: 2018/07/22 19:25:11 by vdarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ static unsigned int	fill_message(unsigned char **content, unsigned long len)
 	buff[len + mod - 6] = (char)(len * 8 >> (8 * 2));
 	buff[len + mod - 7] = (char)(len * 8 >> (8 * 1));
 	buff[len + mod - 8] = (char)(len * 8 >> (8 * 0));
-	free(*content);
 	*content = buff;
 	return (mod + len);
 }
@@ -138,7 +137,7 @@ static char			*get_md5_hash(unsigned int *h)
 	return (out);
 }
 
-char				*md5(unsigned char **content, unsigned long size)
+char				*md5(unsigned char *content, unsigned long size)
 {
 	unsigned int	msg_len;
 	unsigned int	offset;
@@ -147,22 +146,22 @@ char				*md5(unsigned char **content, unsigned long size)
 
 	if (!(data = malloc(sizeof(struct s_data))))
 		ft_exiterror("Malloc failed.", 1);
-	data->out[0] = INIT_DATA_A;
-	data->out[1] = INIT_DATA_B;
-	data->out[2] = INIT_DATA_C;
-	data->out[3] = INIT_DATA_D;
-	msg_len = fill_message(content, size);
+	data->out[0] = 0x67452301;
+	data->out[1] = 0xefcdab89;
+	data->out[2] = 0x98badcfe;
+	data->out[3] = 0x10325476;
+	msg_len = fill_message(&content, size);
 	offset = 0;
-	while (offset < msg_len)
+	while (offset < msg_len && (offset += 64))
 	{
-		main_loop(data, *content, offset);
+		main_loop(data, content, offset - 64);
 		data->out[0] += data->a;
 		data->out[1] += data->b;
 		data->out[2] += data->c;
 		data->out[3] += data->d;
-		offset += 64;
 	}
 	out = get_md5_hash(data->out);
 	free(data);
+	free(content);
 	return (out);
 }

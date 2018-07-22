@@ -6,7 +6,7 @@
 /*   By: vdarmaya <vdarmaya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/16 19:57:08 by vdarmaya          #+#    #+#             */
-/*   Updated: 2018/07/21 19:15:22 by vdarmaya         ###   ########.fr       */
+/*   Updated: 2018/07/22 19:43:18 by vdarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ unsigned int	leftrotate(unsigned int x, unsigned int c)
 	return ((x << c) | (x >> (32 - c)));
 }
 
-unsigned int	rightrotate(unsigned int x, unsigned int c)
+unsigned int	rrot(unsigned int x, unsigned int c)
 {
 	return ((x >> c) | (x << (32 - c)));
 }

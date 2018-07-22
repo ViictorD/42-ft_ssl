@@ -6,7 +6,7 @@
 /*   By: vdarmaya <vdarmaya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/12 20:53:02 by vdarmaya          #+#    #+#             */
-/*   Updated: 2018/07/21 19:43:25 by vdarmaya         ###   ########.fr       */
+/*   Updated: 2018/07/22 21:23:44 by vdarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 static void	manage_opt(char **argv, t_opt *opt)
 {
-	if (!ft_strcmp("md5", argv[1]) || !ft_strcmp("sha256", argv[1]))
+	if (!ft_strcmp("md5", argv[1]) || !ft_strcmp("sha256", argv[1]) || \
+		!ft_strcmp("sha224", argv[1]) || !ft_strcmp("sha512", argv[1]))
 		opt->algo = argv[1];
 	else
 	{
@@ -23,6 +24,15 @@ static void	manage_opt(char **argv, t_opt *opt)
 		ft_fputstr("'is an invalid command.\n\nStandard commands:\n\n", 2);
 		ft_exiterror("Message Digest commands:\n\nmd5\nsha256", 1);
 	}
+}
+
+char		algo(char set, char value)
+{
+	static char	algo = 1;
+
+	if (set)
+		algo = value;
+	return (algo);
 }
 
 void		opt_error_msg(char *param)
@@ -50,8 +60,12 @@ int			main(int argc, char **argv)
 	opt->r = 0;
 	manage_opt(argv, opt);
 	if (!ft_strcmp("md5", argv[1]))
-		manage_md5(opt, argc, argv);
+		manage_hash(opt, argc, argv, MD5);
+	if (!ft_strcmp("sha224", argv[1]))
+		manage_hash(opt, argc, argv, SHA224);
 	if (!ft_strcmp("sha256", argv[1]))
-		ft_putstr(sha256(argv[2], ft_strlen(argv[2])));
+		manage_hash(opt, argc, argv, SHA256);
+	if (!ft_strcmp("sha512", argv[1]))
+		manage_hash(opt, argc, argv, SHA512);
 	return (0);
 }

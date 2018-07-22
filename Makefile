@@ -15,8 +15,11 @@ SRC_DIR = ./srcs/
 FILES = main.c \
 			md5.c \
 			md52.c \
+			sha.c \
+			sha224.c \
 			sha256.c \
-			manage_md5.c \
+			sha512.c \
+			manage_hash.c \
 			print.c
 
 
