@@ -6,7 +6,7 @@
 /*   By: vdarmaya <vdarmaya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/21 18:11:33 by vdarmaya          #+#    #+#             */
-/*   Updated: 2018/07/22 19:44:08 by vdarmaya         ###   ########.fr       */
+/*   Updated: 2018/07/23 17:15:48 by vdarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,17 +48,18 @@ static void	main_loop_sha2562(t_sha256 *s, unsigned int *w, unsigned int *s0, \
 
 static char	*get_sha256_hash(unsigned int *h)
 {
-	char	buff_hex[8][9];
-	char	*out;
-	int		i;
-	int		j;
-	int		l;
+	unsigned char	buff_hex[8][8];
+	char			*out;
+	int				i;
+	int				j;
+	int				l;
 
 	i = -1;
 	while (++i < 8)
 	{
+		ft_memset(buff_hex[i], '0', 8);
 		get_hex(buff_hex[i], h[i], 0);
-		reverse_string(buff_hex[i]);
+		strrev(buff_hex[i], 8);
 	}
 	if (!(out = (char*)malloc(65)))
 		ft_exiterror("Malloc failed.", 1);
@@ -66,25 +67,12 @@ static char	*get_sha256_hash(unsigned int *h)
 	j = -1;
 	while (++i < 64)
 	{
-		if ((!i || i == 8 || i == 16 || i == 24 || i == 32 || i == 40 || \
-			i == 48 || i == 56) && (++j + 1))
+		if (!(i % 8) && (++j + 1))
 			l = -1;
 		out[i] = buff_hex[j][++l];
 	}
 	out[i] = '\0';
 	return (out);
-}
-
-static void	asign_letter(t_sha256 *s)
-{
-	s->a = s->out[0];
-	s->b = s->out[1];
-	s->c = s->out[2];
-	s->d = s->out[3];
-	s->e = s->out[4];
-	s->f = s->out[5];
-	s->g = s->out[6];
-	s->h = s->out[7];
 }
 
 void		main_loop_sha256(t_sha256 *s, unsigned char *msg)
@@ -107,7 +95,7 @@ void		main_loop_sha256(t_sha256 *s, unsigned char *msg)
 		s1 = rrot(w[i - 2], 17) ^ rrot(w[i - 2], 19) ^ (w[i - 2] >> 10);
 		w[i] = w[i - 16] + s0 + w[i - 7] + s1;
 	}
-	asign_letter(s);
+	asign_letter_256(s);
 	i = -1;
 	while (++i < 64)
 	{

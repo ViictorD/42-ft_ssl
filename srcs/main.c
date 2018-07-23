@@ -6,7 +6,7 @@
 /*   By: vdarmaya <vdarmaya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/12 20:53:02 by vdarmaya          #+#    #+#             */
-/*   Updated: 2018/07/22 21:23:44 by vdarmaya         ###   ########.fr       */
+/*   Updated: 2018/07/23 16:57:10 by vdarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,17 @@
 static void	manage_opt(char **argv, t_opt *opt)
 {
 	if (!ft_strcmp("md5", argv[1]) || !ft_strcmp("sha256", argv[1]) || \
-		!ft_strcmp("sha224", argv[1]) || !ft_strcmp("sha512", argv[1]))
+		!ft_strcmp("sha224", argv[1]) || !ft_strcmp("sha384", argv[1]) || \
+		!ft_strcmp("sha512", argv[1]) || !ft_strcmp("sha512/224", argv[1]) || \
+		!ft_strcmp("sha512/256", argv[1]))
 		opt->algo = argv[1];
 	else
 	{
 		ft_fputstr("ft_ssl: Error:'", 2);
 		ft_fputstr(argv[1], 2);
 		ft_fputstr("'is an invalid command.\n\nStandard commands:\n\n", 2);
-		ft_exiterror("Message Digest commands:\n\nmd5\nsha256", 1);
+		ft_fputstr("Message Digest commands:\n\nmd5\nsha224\nsha256\n", 2);
+		ft_fputstr("sha384\nsha512\nsha512/224\nsha512/256\n", 2);
 	}
 }
 
@@ -65,7 +68,13 @@ int			main(int argc, char **argv)
 		manage_hash(opt, argc, argv, SHA224);
 	if (!ft_strcmp("sha256", argv[1]))
 		manage_hash(opt, argc, argv, SHA256);
+	if (!ft_strcmp("sha384", argv[1]))
+		manage_hash(opt, argc, argv, SHA384);
 	if (!ft_strcmp("sha512", argv[1]))
 		manage_hash(opt, argc, argv, SHA512);
+	if (!ft_strcmp("sha512/224", argv[1]))
+		manage_hash(opt, argc, argv, SHA512224);
+	if (!ft_strcmp("sha512/256", argv[1]))
+		manage_hash(opt, argc, argv, SHA512256);
 	return (0);
 }

@@ -13,14 +13,21 @@ DIR_LIB = ./libft/
 SRC_DIR = ./srcs/
 
 FILES = main.c \
+			manage_hash.c \
+			manage_hash2.c \
 			md5.c \
-			md52.c \
 			sha.c \
 			sha224.c \
 			sha256.c \
+			sha384.c \
 			sha512.c \
-			manage_hash.c \
-			print.c
+			sha512_bis.c \
+			sha512t.c \
+			print.c \
+			utils.c \
+			init_algo.c \
+			add_values.c \
+			manage_byte.c
 
 
 SRCS = $(addprefix $(SRC_DIR), $(FILES))

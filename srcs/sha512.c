@@ -6,7 +6,7 @@
 /*   By: vdarmaya <vdarmaya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/22 20:01:16 by vdarmaya          #+#    #+#             */
-/*   Updated: 2018/07/22 22:19:30 by vdarmaya         ###   ########.fr       */
+/*   Updated: 2018/07/23 17:31:38 by vdarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,18 +40,12 @@ static unsigned long g_k[80] = {0x428a2f98d728ae22, 0x7137449123ef65cd,
 	0x3c9ebe0a15c9bebc, 0x431d67c49c100d4c, 0x4cc5d4becb3e42b6,
 	0x597f299cfc657e2a, 0x5fcb6fab3ad6faec, 0x6c44198c4a475817};
 
-unsigned long	rrot_l(unsigned long x, unsigned long c)
-{
-	return ((x >> c) | (x << (64 - c)));
-}
-
-static void	main_loop_sha5122(t_sha512 *s, unsigned long *w, unsigned int *s0, \
-				unsigned int *s1)
+static void	main_loop_sha5122(t_sha512 *s, unsigned long *w, \
+				unsigned long *s0, unsigned long *s1)
 {
 	unsigned long	ch;
 	unsigned long	tmp;
 	unsigned long	tmp2;
-
 
 	*s1 = rrot_l(s->e, 14) ^ rrot_l(s->e, 18) ^ rrot_l(s->e, 41);
 	ch = (s->e & s->f) ^ ((~s->e) & s->g);
@@ -68,73 +62,19 @@ static void	main_loop_sha5122(t_sha512 *s, unsigned long *w, unsigned int *s0, \
 	s->a = tmp + tmp2;
 }
 
-static char	*get_sha512_hash(unsigned long *h)
-{
-	char	buff_hex[16][9];
-	char	*out;
-	int		i;
-	int		j;
-	int		l;
-
-	i = -1;
-	while (++i < 16)
-	{
-		get_hex(buff_hex[i], h[i], 0);
-		reverse_string(buff_hex[i]);
-	}
-	if (!(out = (char*)malloc(129)))
-		ft_exiterror("Malloc failed.", 1);
-	i = -1;
-	j = -1;
-	while (++i < 128)
-	{
-		if ((!i || i == 8 || i == 16 || i == 24 || i == 32 || i == 40 || \
-			i == 48 || i == 56 || i == 64 || i == 72 || i == 80 || i == 88 || \
-			i == 96 || i == 104 || i == 112 || i == 120) && (++j + 1))
-			l = -1;
-		out[i] = buff_hex[j][++l];
-	}
-	out[i] = '\0';
-	return (out);
-}
-
-static void	asign_letter(t_sha512 *s)
-{
-	s->a = s->out[0];
-	s->b = s->out[1];
-	s->c = s->out[2];
-	s->d = s->out[3];
-	s->e = s->out[4];
-	s->f = s->out[5];
-	s->g = s->out[6];
-	s->h = s->out[7];
-}
-
-unsigned long			uswap_64(unsigned long x)
-{
-	return ((((x) & 0xff00000000000000ull) >> 56) \
-		| (((x) & 0x00ff000000000000ull) >> 40) \
-		| (((x) & 0x0000ff0000000000ull) >> 24) \
-		| (((x) & 0x000000ff00000000ull) >> 8) \
-		| (((x) & 0x00000000ff000000ull) << 8) \
-		| (((x) & 0x0000000000ff0000ull) << 24) \
-		| (((x) & 0x000000000000ff00ull) << 40) \
-		| (((x) & 0x00000000000000ffull) << 56));
-}
-
-static void	main_loop_sha512(t_sha512 *s, unsigned char *msg)
+void		main_loop_sha512(t_sha512 *s, unsigned char *msg)
 {
 	unsigned long	w[80];
 	unsigned long	*m;
-	unsigned int	s0;
-	unsigned int	s1;
+	unsigned long	s0;
+	unsigned long	s1;
 	int				i;
 
 	ft_bzero(w, 640);
 	m = (unsigned long*)msg;
 	i = -1;
 	while (++i < 16)
-		w[i] = uswap_64(m[i]);
+		w[i] = m[i];
 	--i;
 	while (++i < 80)
 	{
@@ -142,7 +82,7 @@ static void	main_loop_sha512(t_sha512 *s, unsigned char *msg)
 		s1 = rrot_l(w[i - 2], 19) ^ rrot_l(w[i - 2], 61) ^ (w[i - 2] >> 6);
 		w[i] = w[i - 16] + s0 + w[i - 7] + s1;
 	}
-	asign_letter(s);
+	asign_letter_512(s);
 	i = -1;
 	while (++i < 80)
 	{
@@ -151,9 +91,29 @@ static void	main_loop_sha512(t_sha512 *s, unsigned char *msg)
 	}
 }
 
-static size_t	fill_message_sha512(unsigned char **msg, unsigned long len)
+static void	add_size_64(unsigned char *buff, __uint128_t len, __uint128_t mod)
 {
-	unsigned long	mod;
+	buff[len + mod - 1] = ((len * 8) & 0xFF00000000000000) >> 56;
+	buff[len + mod - 2] = ((len * 8) & 0x00FF000000000000) >> 48;
+	buff[len + mod - 3] = ((len * 8) & 0x0000FF0000000000) >> 40;
+	buff[len + mod - 4] = ((len * 8) & 0x000000FF00000000) >> 32;
+	buff[len + mod - 5] = ((len * 8) & 0x00000000FF000000) >> 24;
+	buff[len + mod - 6] = ((len * 8) & 0x0000000000FF0000) >> 16;
+	buff[len + mod - 7] = ((len * 8) & 0x000000000000FF00) >> 8;
+	buff[len + mod - 8] = ((len * 8) & 0x00000000000000FF);
+	buff[len + mod - 9] = ((len * 8) >> 64 & 0xFF00000000000000) >> 56;
+	buff[len + mod - 10] = ((len * 8) >> 64 & 0x00FF000000000000) >> 48;
+	buff[len + mod - 11] = ((len * 8) >> 64 & 0x0000FF0000000000) >> 40;
+	buff[len + mod - 12] = ((len * 8) >> 64 & 0x000000FF00000000) >> 32;
+	buff[len + mod - 13] = ((len * 8) >> 64 & 0x00000000FF000000) >> 24;
+	buff[len + mod - 14] = ((len * 8) >> 64 & 0x0000000000FF0000) >> 16;
+	buff[len + mod - 15] = ((len * 8) >> 64 & 0x000000000000FF00) >> 8;
+	buff[len + mod - 16] = ((len * 8) >> 64 & 0x00000000000000FF);
+}
+
+size_t		fill_message_sha512(unsigned char **msg, __uint128_t len)
+{
+	__uint128_t		mod;
 	unsigned char	*buff;
 
 	mod = 128 + (128 * (len / 128)) - len;
@@ -164,27 +124,13 @@ static size_t	fill_message_sha512(unsigned char **msg, unsigned long len)
 	ft_memcpy(buff, *msg, len);
 	buff[len] = 0x80;
 	ft_bzero(buff + len + 1, mod - 1);
-	// buff[len + mod - 16] = (char)((len * 8) >> (8 * 15));
-	// buff[len + mod - 15] = (char)((len * 8) >> (8 * 14));
-	// buff[len + mod - 14] = (char)((len * 8) >> (8 * 13));
-	// buff[len + mod - 13] = (char)((len * 8) >> (8 * 12));
-	// buff[len + mod - 12] = (char)((len * 8) >> (8 * 11));
-	// buff[len + mod - 11] = (char)((len * 8) >> (8 * 10));
-	// buff[len + mod - 10] = (char)((len * 8) >> (8 * 9));
-	// buff[len + mod - 9] = (char)((len * 8) >> (8 * 8));
-	buff[len + mod - 8] = (char)((len * 8) >> (8 * 7));
-	buff[len + mod - 7] = (char)((len * 8) >> (8 * 6));
-	buff[len + mod - 6] = (char)((len * 8) >> (8 * 5));
-	buff[len + mod - 5] = (char)((len * 8) >> (8 * 4));
-	buff[len + mod - 4] = (char)((len * 8) >> (8 * 3));
-	buff[len + mod - 3] = (char)((len * 8) >> (8 * 2));
-	buff[len + mod - 2] = (char)((len * 8) >> (8 * 1));
-	buff[len + mod - 1] = (char)((len * 8) >> (8 * 0));
+	add_size_64(buff, len, mod);
+	rev_64(buff, len);
 	*msg = buff;
 	return (mod + len);
 }
 
-char		*sha512(unsigned char *msg, unsigned long size)
+char		*sha512(unsigned char *msg, __uint128_t size)
 {
 	unsigned int	msg_len;
 	unsigned int	offset;
@@ -193,7 +139,7 @@ char		*sha512(unsigned char *msg, unsigned long size)
 
 	if (!(s = (t_sha512*)malloc(sizeof(struct s_sha512))))
 		ft_exiterror("Malloc failed.", 1);
-	init_sha512_output(s);
+	init_sha512_output(s, SHA512);
 	msg_len = fill_message_sha512(&msg, size);
 	offset = 0;
 	while (offset < msg_len)

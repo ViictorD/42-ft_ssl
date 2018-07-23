@@ -6,52 +6,11 @@
 /*   By: vdarmaya <vdarmaya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/15 22:37:41 by vdarmaya          #+#    #+#             */
-/*   Updated: 2018/07/22 21:02:10 by vdarmaya         ###   ########.fr       */
+/*   Updated: 2018/07/23 17:04:38 by vdarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
-
-static void	stdin2(char **save, char **str, int ret)
-{
-	char			*tmp;
-
-	tmp = *save;
-	*save = ft_strjoin(*save, *str);
-	free(tmp);
-	free(*str);
-	if (ret == 2)
-	{
-		tmp = *save;
-		*save = ft_strjoin(*save, "\n");
-		free(tmp);
-	}
-}
-
-void		stdin(char p)
-{
-	char			*save;
-	unsigned char	*usave;
-	char			*str;
-	int				ret;
-
-	str = NULL;
-	save = ft_strdup("");
-	while ((ret = fake_gnl(0, &str, 0)) > 0)
-		stdin2(&save, &str, ret);
-	free(str);
-	if (p)
-		ft_putstr(save);
-	usave = (unsigned char*)save;
-	if (!(str = go_algo(usave, ft_strlen((char*)usave))))
-	{
-		free(usave);
-		return ;
-	}
-	ft_putstr(str);
-	free(str);
-	free(usave);
-}
 
 static void	manage_s(t_opt *opt, int argc, char **argv, int *i)
 {
@@ -116,6 +75,17 @@ static char	manage_hash2(t_opt *opt, char **argv, int i, char *file)
 	return (1);
 }
 
+static char	cmp_algo(char *str)
+{
+	return (!ft_strcmp("md5", str) \
+			|| !ft_strcmp("sha256", str) \
+			|| !ft_strcmp("sha224", str) \
+			|| !ft_strcmp("sha384", str) \
+			|| !ft_strcmp("sha512", str) \
+			|| !ft_strcmp("sha512/224", str) \
+			|| !ft_strcmp("sha512/256", str));
+}
+
 void		manage_hash(t_opt *opt, int argc, char **argv, char algoo)
 {
 	int		i;
@@ -132,9 +102,7 @@ void		manage_hash(t_opt *opt, int argc, char **argv, char algoo)
 			continue ;
 		else if (!ft_strcmp("-s", argv[i]) && (file = 1))
 			manage_s(opt, argc, argv, &i);
-		else if (*argv[i] == '-' && (!ft_strcmp("md5", argv[1]) || \
-			!ft_strcmp("sha256", argv[1]) || !ft_strcmp("sha224", argv[1]) || \
-			!ft_strcmp("sha512", argv[1])))
+		else if (*argv[i] == '-' && cmp_algo(argv[1]))
 			opt_error_msg(argv[i]);
 		else
 		{

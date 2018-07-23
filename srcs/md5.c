@@ -6,7 +6,7 @@
 /*   By: vdarmaya <vdarmaya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/16 20:02:35 by vdarmaya          #+#    #+#             */
-/*   Updated: 2018/07/22 19:25:11 by vdarmaya         ###   ########.fr       */
+/*   Updated: 2018/07/23 15:40:21 by vdarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,17 +111,18 @@ static void			main_loop(t_data *data, unsigned char *content, \
 
 static char			*get_md5_hash(unsigned int *h)
 {
-	char	*out;
-	char	buff_hex[4][9];
-	int		i;
-	int		j;
-	int		l;
+	char			*out;
+	unsigned char	buff_hex[4][8];
+	int				i;
+	int				j;
+	int				l;
 
 	i = -1;
 	while (++i < 4)
 	{
+		ft_memset(buff_hex[i], '0', 8);
 		get_hex(buff_hex[i], convert_little_endiant(h[i]), 0);
-		reverse_string(buff_hex[i]);
+		strrev(buff_hex[i], 8);
 	}
 	if (!(out = (char*)malloc(33)))
 		ft_exiterror("Malloc failed.", 1);

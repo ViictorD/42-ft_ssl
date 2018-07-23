@@ -6,7 +6,7 @@
 /*   By: vdarmaya <vdarmaya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/16 20:45:59 by vdarmaya          #+#    #+#             */
-/*   Updated: 2018/07/22 21:23:15 by vdarmaya         ###   ########.fr       */
+/*   Updated: 2018/07/23 16:52:07 by vdarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,14 @@ static void	print_normal(char *str, char *str2, char quot)
 		ft_putstr("SHA224 (");
 	else if (algo(0, 0) == SHA256)
 		ft_putstr("SHA256 (");
+	else if (algo(0, 0) == SHA384)
+		ft_putstr("SHA384 (");
 	else if (algo(0, 0) == SHA512)
 		ft_putstr("SHA512 (");
+	else if (algo(0, 0) == SHA512224)
+		ft_putstr("SHA512/224 (");
+	else if (algo(0, 0) == SHA512256)
+		ft_putstr("SHA512/256 (");
 	if (quot)
 		ft_putchar('\"');
 	ft_putstr(str2);
