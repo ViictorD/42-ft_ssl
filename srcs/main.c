@@ -6,7 +6,7 @@
 /*   By: vdarmaya <vdarmaya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/12 20:53:02 by vdarmaya          #+#    #+#             */
-/*   Updated: 2018/07/23 16:57:10 by vdarmaya         ###   ########.fr       */
+/*   Updated: 2018/07/23 17:50:35 by vdarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ static void	manage_opt(char **argv, t_opt *opt)
 		ft_fputstr("'is an invalid command.\n\nStandard commands:\n\n", 2);
 		ft_fputstr("Message Digest commands:\n\nmd5\nsha224\nsha256\n", 2);
 		ft_fputstr("sha384\nsha512\nsha512/224\nsha512/256\n", 2);
+		ft_fputstr("\nCipher commands:\n", 2);
 	}
 }
 

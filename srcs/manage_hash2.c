@@ -6,7 +6,7 @@
 /*   By: vdarmaya <vdarmaya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/23 17:04:25 by vdarmaya          #+#    #+#             */
-/*   Updated: 2018/07/23 17:04:42 by vdarmaya         ###   ########.fr       */
+/*   Updated: 2018/07/23 17:41:46 by vdarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void		stdin(char p)
 		free(usave);
 		return ;
 	}
-	ft_putstr(str);
+	ft_putendl(str);
 	free(str);
 	free(usave);
 }
